@@ -62,8 +62,9 @@ def server(input, output, session):
             # Process image with egg counter
             try:
                 img_rgb, count = egg_counter.countImage(img_rgb)
+                img_rgb = cv2.resize(img_rgb, (0,0), fx=0.25, fy=0.25)
             except:
-                img_rgb, count = img_rgb, "error"
+                img_rgb, count = cv2.resize(img_rgb, (0,0), fx=0.25, fy=0.25), "error"
 
             with reactive.isolate():
                 counts.set(pd.concat([counts.get(), pd.DataFrame({"image_name": [input.current_image_name()], "count": [count]})]))
