@@ -34,8 +34,8 @@ def server(input, output, session):
 
     @reactive.effect
     def keep_alive():
-        # This will trigger every 25 seconds
-        reactive.invalidate_later(25000)
+        # This will trigger every 30 seconds
+        reactive.invalidate_later(30)
         print("Keeping session alive...")
     
     @reactive.effect
