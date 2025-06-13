@@ -89,19 +89,26 @@ def cropRectangleFromContour(c, img):
 
     return warped
 
-def classifyObject(cv2Image):
-  img = cv2Image
-  img = cv2.resize(img, (150, 150))
-  img = Image.fromarray(img)
-
-  img_array = tf.keras.preprocessing.image.img_to_array(img)
-  img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
-  img_array /= 255.0
-
-  # Make a prediction
-  predictions = model.signatures['serving_default'](tf.constant(img_array))
-
-  return predictions['output_0'].numpy()
+def classifyObject(cv2Images):
+    # Handle both single image and batch of images
+    if not isinstance(cv2Images, list):
+        cv2Images = [cv2Images]
+    
+    # Preprocess all images
+    processed_images = []
+    for img in cv2Images:
+        img = cv2.resize(img, (150, 150))
+        img = Image.fromarray(img)
+        img_array = tf.keras.preprocessing.image.img_to_array(img)
+        processed_images.append(img_array)
+    
+    # Stack images into a batch
+    batch = np.stack(processed_images)
+    batch = batch / 255.0  # Normalize
+    
+    # Make predictions in batch
+    predictions = model.signatures['serving_default'](tf.constant(batch))
+    return predictions['output_0'].numpy()
 
 modelDirectory = "saved_model"
 model = tf.saved_model.load(modelDirectory)
@@ -115,31 +122,40 @@ def countImage(img):
     kernel = np.ones((7, 7), np.uint8)
     thres = cv2.morphologyEx(thres, cv2.MORPH_OPEN, kernel)
     cnts, _ = cv2.findContours(thres, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    cnts_filtered = []
-    print("counting eggs")
+    
+    # Collect potential egg images first
+    potential_eggs = []
+    potential_contours = []
+    print("collecting potential eggs")
     for i, c in enumerate(cnts):
         objectIsInFrame = (
             thisBorders[0] < c.flatten()[1] < thisBorders[1] and
             thisBorders[2] < c.flatten()[0] < thisBorders[3]
         )
         area = cv2.contourArea(c)
-        # TUNE: AREA THRESHOLD
-        # Filter by area
         if(area < 4000 and area > 1500 and objectIsInFrame):
             width = min(cv2.minAreaRect(c)[1])
             length = max(cv2.minAreaRect(c)[1])
-            # TUNE: L, W, LW THRESHOLD
             if(length > 40 and length < 150 and length/width > 1.5 and length/width < 5):
                 thisObject = cropSquareFromContour(c, img)
-                modelClasses = ("egg", "not egg")
-                prediction = modelClasses[np.argmax(classifyObject(thisObject))]
-                if(prediction == "egg"):
-                    cnts_filtered.append(c)
+                potential_eggs.append(thisObject)
+                potential_contours.append(c)
+
+    # Process in batches
+    batch_size = np.min([2 ** 13, len(potential_eggs)])
+    cnts_filtered = []
+    modelClasses = ("egg", "not egg")
+    
+    print("classifying eggs in batches")
+    for i in range(0, len(potential_eggs), batch_size):
+        batch = potential_eggs[i:i + batch_size]
+        predictions = classifyObject(batch)
+        for j, pred in enumerate(predictions):
+            if modelClasses[np.argmax(pred)] == "egg":
+                cnts_filtered.append(potential_contours[i + j])
 
     cv2.rectangle(img, (thisBorders[2], thisBorders[0]), (thisBorders[3], thisBorders[1]), 1, 10)
     cv2.drawContours(img, cnts_filtered, -1, (0,255, 20), 6)
     img = cv2.putText(img, 'Egg count: ' + str(len(cnts_filtered)), (100, 100), 1, 8, 1, 10)
     print("finished counting image")
     return img, len(cnts_filtered)
-
-
