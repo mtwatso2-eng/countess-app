@@ -60,7 +60,10 @@ def server(input, output, session):
             img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             
             # Process image with egg counter
-            img_rgb, count = egg_counter.countImage(img_rgb)
+            try:
+                img_rgb, count = egg_counter.countImage(img_rgb)
+            except:
+                img_rgb, count = img_rgb, "error"
 
             with reactive.isolate():
                 counts.set(pd.concat([counts.get(), pd.DataFrame({"image_name": [input.current_image_name()], "count": [count]})]))
