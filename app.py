@@ -31,6 +31,12 @@ def server(input, output, session):
     # Reactive values for storing data
     counts = reactive.value(pd.DataFrame(columns=["image_name", "count"]))
     processed_image = reactive.value(None)
+
+    @reactive.effect
+    def keep_alive():
+        # This will trigger every 25 seconds
+        reactive.invalidate_later(25000)
+        print("Keeping session alive...")
     
     @reactive.effect
     async def process_current_image():
