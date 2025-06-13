@@ -70,7 +70,7 @@ def server(input, output, session):
                 counts.set(pd.concat([counts.get(), pd.DataFrame({"image_name": [input.current_image_name()], "count": [count]})]))
             
             # Create figure for this image
-            fig = plt.figure(figsize=(20, 16))
+            fig = plt.figure(figsize=(10, 8))
             plt.imshow(img_rgb)
             plt.axis('off')
             plt.title(input.current_image_name())
@@ -89,7 +89,6 @@ def server(input, output, session):
     def image_display():
         if processed_image.get() is None:
             return ui.p("Select a directory with images to begin analysis")
-        
         return ui.img(src=f"data:image/png;base64,{processed_image.get()}")
 
     @output
