@@ -2,7 +2,7 @@ fileIterator = """
         let imageFiles = [];
         let currentImageIndex = 0;
         let autoPlayInterval = null;
-        const AUTO_PLAY_DELAY = 3000; // 3 seconds between images
+        const AUTO_PLAY_DELAY = 1000; // 1 second between images
         
         async function selectDirectory() {
             try {
