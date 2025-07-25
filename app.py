@@ -24,6 +24,7 @@ app_ui = ui.page_fluid(
     ui.br(),
     ui.output_ui("image_display"),
     ui.output_ui("completion_message"),
+    ui.output_ui("processing_done"),  # Hidden output for JS signaling
     ui.download_button("downloadResults", "Download .csv of counts")
 )
 
@@ -31,6 +32,7 @@ def server(input, output, session):
     # Reactive values for storing data
     counts = reactive.value(pd.DataFrame(columns=["image_name", "count"]))
     processed_image = reactive.value(None)
+    processing_done_counter = reactive.value(0)  # Counter for signaling
 
     @reactive.effect
     def keep_alive():
@@ -83,6 +85,9 @@ def server(input, output, session):
             img_str = base64.b64encode(buf.getvalue()).decode()
             
             processed_image.set(img_str)
+            # Signal to frontend that processing is done
+            with reactive.isolate():
+                processing_done_counter.set(processing_done_counter.get() + 1)
 
     @output
     @render.ui
@@ -102,6 +107,12 @@ def server(input, output, session):
             )
         return None
     
+    @output
+    @render.ui
+    def processing_done():
+        # Hidden div for JS to observe
+        return ui.div(str(processing_done_counter.get()), id="processing_done", style="display:none;")
+
     @render.download(filename="counts.csv")
     async def downloadResults():
         await asyncio.sleep(0.25)
