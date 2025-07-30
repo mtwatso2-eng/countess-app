@@ -25,9 +25,6 @@ Filler text
 # Statement of need
 
 Filler text
- 
-# Setup
-Filler text
 
 # Design and usage
 
