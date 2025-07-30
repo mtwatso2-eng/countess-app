@@ -1,4 +1,4 @@
-# countess
+# countess-app
 
 A Posit Shiny web app in Python for automated counting of nematode eggs from microscope images of counting slides. 
 
