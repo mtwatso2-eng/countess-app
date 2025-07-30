@@ -25,7 +25,7 @@ Countess is a Shiny web app for automating counts of nematode eggs from counting
 
 # Statement of need
 
-We developed this tool in the context of plant breeding for root-knot nematode (_Meloidogyne_ spp.) resistance, for which high-throughput quantitative assays of nematode reproduction are essential. _Significance of root-knot nematodes as plant parasites. Need for high-throughput quantitative bioassays, especially in plant breeding programs for resistance. Acknowledge other cases where nematode counting may be useful (including outside of plants). Why counting of eggs, as opposed to other quantification methods? Need for automated counts as opposed to human visual counts for throughput and accuracy. _
+We developed this tool in the context of plant breeding for root-knot nematode (_Meloidogyne_ spp.) resistance, for which high-throughput quantitative assays of nematode reproduction are essential. Significance of root-knot nematodes as plant parasites. Need for high-throughput quantitative bioassays, especially in plant breeding programs for resistance. Acknowledge other cases where nematode counting may be useful (including outside of plants). Why counting of eggs, as opposed to other quantification methods? Need for automated counts as opposed to human visual counts for throughput and accuracy.
 
 Existing tools for nematode egg counting, including our previous Countess code in Colab, which is not a web app and uses an older algorithm using an older model. Precedent of shiny apps for other agricultural tasks; how our use case in image analysis is new.
 
