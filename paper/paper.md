@@ -9,7 +9,6 @@ authors:
  - name: Mark Watson
    orcid: 0009-0001-6607-880X
    affiliation: 1
-   
  
 affiliations:
  - name: University of California, Davis
