@@ -25,15 +25,13 @@ Countess is a Shiny web app for automating counts of nematode eggs from counting
 
 # Statement of need
 
-Significance of root-knot nematodes as plant parasites. Need for high-throughput quantitative bioassays, especially in plant breeding programs for resistance. Acknowledge other cases where nematode counting may be useful (including outside of plants). Why counting of eggs, as opposed to other quantification methods? Need for automated counts as opposed to human visual counts for throughput and accuracy. 
+We developed this tool in the context of plant breeding for root-knot nematode (_Meloidogyne_ spp.) resistance, for which high-throughput quantitative assays of nematode reproduction are essential. Significance of root-knot nematodes as plant parasites. Need for high-throughput quantitative bioassays, especially in plant breeding programs for resistance. Acknowledge other cases where nematode counting may be useful (including outside of plants). Why counting of eggs, as opposed to other quantification methods? Need for automated counts as opposed to human visual counts for throughput and accuracy. 
 
-Existing tools for nematode egg counting, including our previous Countess code in Colab, which is not a web app and uses an older model. Precedent of shiny apps for similar image analysis apps.
+Existing tools for nematode egg counting, including our previous Countess code in Colab, which is not a web app and uses an older algorithm using an older model. Precedent of shiny apps for similar image analysis apps.
 
 # Design and usage
 
 The Countess app is built on two main components: a Shiny user interface (UI)\cite{}, and a backend image analysis algorithm. The Shiny user interface consists of a button to select a local directory containing nematode counting slide images, an output that displays uploaded images with egg countours drawn on them they are being counted, and a button to download a .csv file of counts. The UI is designed to require minimal resources while remaining scalable to an arbitrary number of images, as it only loads one image to memory at a time and avoids app timeouts as long as counts are being performed. The image analysis algorithm that the app depends on is an updated version of the algorithm described in \cite{}. This algorithm takes nematode counting slide images from Chalex counting slides (Chalex, LLC, Park City, UT) prepared using the method described in \cite{} as input, and returns a data frame of nematode counts corresponding to each image as output. 
-
-This algorithm counts nematode eggs within the boundaries of a Chalex counting plate 
 
 # Acknowledgements
 
