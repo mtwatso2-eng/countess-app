@@ -1,5 +1,5 @@
 ---
-title: ''
+title: 'Countess: a web app for automating nematode egg counts'
 tags:
   - plant phenotyping
   - nematode
@@ -20,7 +20,7 @@ bibliography: paper.bib
  
 # Summary
 
-Countess is a Python Shiny web app for automating counts of nematode eggs from counting slide images. Our hosted instance of the app can be accessed via a browser at [https://mtwatson-countess.share.connect.posit.cloud/](https://mtwatson-countess.share.connect.posit.cloud/), and the app code can also be run as-is locally or deployed by the user to a Shiny cloud deployment service such as Posit Connect Cloud. The Countess app is intended to be used by researchers with no coding experience, and it uses cloud resources to run its image analysis pipeline, so powerful hardware on the user side is not required.
+Countess is a Python Shiny web app for automating counts of nematode eggs from counting slide images. Our hosted instance of the app can be accessed via a browser at [https://mtwatson-countess.share.connect.posit.cloud/](https://mtwatson-countess.share.connect.posit.cloud/), and the app code can also be run as-is locally or deployed by the user to a Shiny cloud deployment service such as Posit Connect Cloud. The Countess app is built to be accessible to researchers with no coding experience, as it requires no code to run and has a simple user interface. Also, the app uses cloud resources to run its image analysis pipeline, so powerful hardware on the user side is not required.
 
 # Statement of need
 
