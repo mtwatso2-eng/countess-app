@@ -13,6 +13,20 @@ from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 def getBorders(cv2Image):
+  """
+  Detects the borders of the counting slide in an image.
+  
+  Uses adaptive thresholding and peak detection to identify the edges of
+  the counting slide. Applies corrections if detected dimensions are outside
+  expected ranges.
+  
+  Args:
+      cv2Image: Input image as a numpy array (BGR format)
+  
+  Returns:
+      list: A list containing [row1, row2, column1, column2] coordinates
+            defining the borders of the counting slide
+  """
   src = cv2.cvtColor(cv2Image, cv2.COLOR_BGR2GRAY)
   src = cv2.blur(src,(src.shape[1], 1))
   src = cv2.adaptiveThreshold(src,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV,101,2)
@@ -43,9 +57,35 @@ def getBorders(cv2Image):
   return([row1, row2, column1, column2])
 
 def tupleToList(t):
+    """
+    Recursively converts tuples to lists in a nested structure.
+    
+    This is useful for converting OpenCV tuple structures (which may contain
+    nested tuples) to lists for easier manipulation in Python.
+    
+    Args:
+        t: A tuple, list, or other value to convert
+    
+    Returns:
+        list or original value: A list if input was a tuple/list, otherwise the original value
+    """
     return list(map(tupleToList, t)) if isinstance(t, (list, tuple)) else t
 
 def cropSquareFromContour(c, img):
+    """
+    Crops and warps a square region from an image based on a contour.
+    
+    Uses perspective transformation to extract a square region defined by
+    the minimum area rectangle of the contour. The result is a square image
+    regardless of the contour's orientation.
+    
+    Args:
+        c: Contour points as a numpy array
+        img: Source image as a numpy array
+    
+    Returns:
+        numpy.ndarray: Warped square image extracted from the contour region
+    """
 
     rect = cv2.minAreaRect(c)
 
@@ -71,6 +111,20 @@ def cropSquareFromContour(c, img):
     return warped
 
 def cropRectangleFromContour(c, img):
+    """
+    Crops and warps a rectangular region from an image based on a contour.
+    
+    Uses perspective transformation to extract a rectangular region defined by
+    the minimum area rectangle of the contour. Preserves the aspect ratio
+    of the detected rectangle.
+    
+    Args:
+        c: Contour points as a numpy array
+        img: Source image as a numpy array
+    
+    Returns:
+        numpy.ndarray: Warped rectangular image extracted from the contour region
+    """
 
     rect = cv2.minAreaRect(c)
 
@@ -90,6 +144,20 @@ def cropRectangleFromContour(c, img):
     return warped
 
 def classifyObject(cv2Images):
+    """
+    Classifies objects in images as eggs or not eggs using a TensorFlow model.
+    
+    Preprocesses images (resize to 150x150, normalize) and runs them through
+    a pre-trained TensorFlow SavedModel. Can handle both single images and
+    batches of images for efficient processing.
+    
+    Args:
+        cv2Images: A single image (numpy array) or list of images to classify
+    
+    Returns:
+        numpy.ndarray: Array of prediction probabilities for each image,
+                       shape (n_images, n_classes) where classes are ["egg", "not egg"]
+    """
     # Handle both single image and batch of images
     if not isinstance(cv2Images, list):
         cv2Images = [cv2Images]
@@ -114,6 +182,24 @@ modelDirectory = "saved_model"
 model = tf.saved_model.load(modelDirectory)
 
 def countImage(img):
+    """
+    Counts eggs in an image using computer vision and machine learning.
+    
+    The main function that orchestrates the egg counting process:
+    1. Detects the borders of the counting slide
+    2. Applies adaptive thresholding to find potential egg objects
+    3. Filters contours by size and aspect ratio
+    4. Classifies each candidate using a TensorFlow model
+    5. Draws bounding boxes and count on the image
+    
+    Args:
+        img: Input image as a numpy array (RGB format)
+    
+    Returns:
+        tuple: A tuple containing:
+            - numpy.ndarray: Processed image with detected eggs highlighted
+            - int: Total count of detected eggs
+    """
     thisBorders = getBorders(img)
 
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
