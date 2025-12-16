@@ -21,7 +21,7 @@ bibliography: paper.bib
  
 # Summary
 
-Countess is a web app for automating counts of nematode eggs from counting slide images. A hosted instance of the app can be accessed via a browser at [https://mtwatson-countess.share.connect.posit.cloud/](https://mtwatson-countess.share.connect.posit.cloud/), and the app code can also be run as-is locally or deployed by the user to a Shiny cloud deployment service such as Posit Connect Cloud. The Countess app is built to be accessible to researchers with no coding experience, as it requires no user code to run and has a simple user interface that only requires images from a previously described nematode egg imaging method (Fraher et al., 2024) as inputs. Also, the app uses cloud resources to run its image analysis pipeline, so powerful hardware on the user side is not required.
+Countess is a web app for automating counts of nematode eggs from counting slide images. Nematode egg counts are an important measurement for nematode bioassays and monitoring in plant (Kalwa 2019), farm animal (Sréter 1994), and human (Hall, 1981) parasitology, but conventional manual counts are subject to low througput and repeatability (Akintayo et al., 2018). The Countess app provides automated high-accuracy nematode counts, as tested in root-knot nematode species, in an accessible web interface. Our hosted instance of the app can be accessed via a browser at [https://mtwatson-countess.share.connect.posit.cloud/](https://mtwatson-countess.share.connect.posit.cloud/), and the app code can also be run as-is locally or deployed by the user to a Shiny cloud deployment service such as Posit Connect Cloud. The Countess app is built to be accessible to researchers with no coding experience, as it requires no user code to run and has a simple user interface that only requires images from a previously described nematode egg imaging method (Fraher et al., 2024) as inputs. Also, the app uses cloud resources to run its image analysis pipeline, so powerful hardware on the user side is not required.
 
 # Statement of need
 
@@ -31,7 +31,7 @@ Existing tools for nematode egg counting, including our previous Countess code i
 
 # Design and usage
 
-The Countess app is built on two main components: a Shiny user interface (UI), and a backend image analysis algorithm. The Shiny user interface consists of a button to select a local directory containing nematode counting slide images, an output that displays uploaded images with egg countours drawn on them they are being counted, and a button to download a .csv file of counts. The UI is designed to require minimal resources while remaining scalable to an arbitrary number of images, as it only loads one image to memory at a time and avoids app timeouts as long as counts are being performed. The method to collect counting slide images using Chalex counting slides (Chalex, LLC, Park City, UT), along with the image analysis algorithm that the app uses to detect, classify, and count nematode eggs, are described in (Fraher et al., 2024). The imaging method is also summarized in the app. The web app takes a folder of counting slide images as input, runs an image analysis method on the input images, and returns a downloadable data frame of nematode counts corresponding to each image as output. The image analysis method is an updated version of the algorithm described in Fraher et al., 2024, which consists of the following steps: counting frame detection, egg-like object segmentation via thresholding, egg classification via a trained convolutional neural network, and counting. The trained convolutional neural network is improved over the model described in Fraher et al., 2024 through the use of a larger training set of ~7000 segmentations vs the original ~3000 segmentations. We tested the web app on a dataset of ~1000 _Meloidogyne javanica_ slide images and obtained an egg count accuracy with R² = 0.984.
+The Countess app is built on two main components: a Shiny (Chang et al., 2024) user interface (UI), and a backend image analysis algorithm. The Shiny user interface consists of a button to select a local directory containing nematode counting slide images, an output that displays uploaded images with egg countours drawn on them they are being counted, and a button to download a .csv file of counts. The UI is designed to require minimal resources while remaining scalable to an arbitrary number of images, as it only loads one image to memory at a time and avoids app timeouts as long as counts are being performed. The method to collect counting slide images using Chalex counting slides (Chalex, LLC, Park City, UT), along with the image analysis algorithm that the app uses to detect, classify, and count nematode eggs, are described in (Fraher et al., 2024). The imaging method is also summarized in the app. The web app takes a folder of counting slide images as input, runs an image analysis method on the input images, and returns a downloadable data frame of nematode counts corresponding to each image as output. The image analysis method is an updated version of the algorithm described in Fraher et al., 2024, which consists of the following steps: counting frame detection, egg-like object segmentation via thresholding implemented using OpenCV (Bradski 2000), egg classification via a convolutional neural network implemented in Pytorch (Paszke et al., 2019), and counting. The trained convolutional neural network is improved over the model described in Fraher et al., 2024 through the use of a larger training set of ~7000 segmentations vs the original ~3000 segmentations. We tested the web app on a dataset of ~1000 _Meloidogyne javanica_ slide images and obtained an egg count accuracy with R² = 0.984.
 
 # Acknowledgements
 
@@ -39,5 +39,21 @@ This work was supported by the Specialty Crops Research Initiative Grant No. 202
 
 # References
 
+Akintayo A, Tylka GL, Singh AK, Ganapathysubramanian B, Singh A, Sarkar S. A deep learning framework to discern and count microscopic nematode eggs. Scientific reports. 2018 Jun 14;8(1):9145.
+
+Bradski G. The opencv library. Dr. Dobb's Journal: Software Tools for the Professional Programmer. 2000;25(11):120-3.
+
+Chang, W., Cheng, J., Allaire, J., Sievert, C., Schloerke, B., Xie, Y., Allen, J., McPherson,
+J., Dipert, A., & Borges, B. (2024). Shiny: Web Application Framework for R. https:
+//doi.org/10.32614/CRAN.package.shiny
+
 Fraher SP, Watson M, Nguyen H, Moore S, Lewis RS, Kudenov M, Yencho GC, Gorny AM. A Comparison of Three Automated Root-Knot Nematode Egg Counting Approaches Using Machine Learning, Image Analysis, and a Hybrid Model. Plant Disease. 2024 Sep 1;108(9):2625-9.
+
+Hall A. Quantitative variability of nematode egg counts in faeces: a study among rural Kenyans. Transactions of the Royal Society of Tropical Medicine and Hygiene. 1981 Jan 1;75(5):682-7.
+
+Kalwa U, Legner C, Wlezien E, Tylka G, Pandey S. New methods of removing debris and high-throughput counting of cyst nematode eggs extracted from field soil. PLoS One. 2019 Oct 15;14(10):e0223386.
+
+Paszke A, Gross S, Massa F, Lerer A, Bradbury J, Chanan G, Killeen T, Lin Z, Gimelshein N, Antiga L, Desmaison A. Pytorch: An imperative style, high-performance deep learning library. Advances in neural information processing systems. 2019;32.
+
+Sréter T, Molnár V, Kassai T. The distribution of nematode egg counts and larval counts in grazing sheep and their implications for parasite control. International Journal for Parasitology. 1994 Feb 1;24(1):103-8.
 
