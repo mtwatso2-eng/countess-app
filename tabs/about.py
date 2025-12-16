@@ -13,7 +13,6 @@ def get_ui():
     return ui.nav_panel(
         "About",
         ui.h3("About Countess"),
-        ui.p("Countess is an application for automatically counting eggs in images using machine learning."),
-        ui.p("This tool helps researchers and professionals quickly analyze large batches of images to count eggs with high accuracy."),
+        ui.p("Countess is an application for automatically counting eggs in images using machine learning. Countess was developed for root-knot nematode quantification for plant breeding, but may be useful in other species as well."),
+        ui.h3("Using Countess"),
     )
-
