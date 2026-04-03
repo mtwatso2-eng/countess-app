@@ -10,4 +10,4 @@ Open the web app and select a folder of slide images to begin counts. The app wi
 
 If you use this app, please cite:
 
-Watson, Mark. "countess-app: A Posit Shiny web app in Python for automated counting of nematode eggs from microscope images of counting slides." (2026), GitHub repository, [https://github.com/charlespwd/project-title](https://github.com/mtwatso2-eng/countess-app)
+Watson, Mark. "countess-app: A Posit Shiny web app in Python for automated counting of nematode eggs from microscope images of counting slides." (2026), GitHub repository, [https://github.com/mtwatso2-eng/countess-app](https://github.com/mtwatso2-eng/countess-app)
